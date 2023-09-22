@@ -155,8 +155,14 @@ install() {
     install_kubectl
     install_krew
     install_krew_plugins
+    install_other
     install_flux
     say "installation end"
+}
+
+install_other() {
+    say "installing other tools"
+    sudo apt install fzf
 }
 
 install_flux() {
