@@ -154,6 +154,7 @@ install() {
     install_helm
     install_kubectl
     install_krew
+    install_krew_plugins
     install_flux
     say "installation end"
 }
@@ -202,6 +203,12 @@ install_krew() {
     sudo -u ${USERNAME} zsh -c '/tmp/krew install krew'
     sudo -u ${USERNAME} zsh -c 'echo "export PATH=\"${KREW_ROOT:-$HOME/.krew}/bin:$PATH\"" >> ${HOME}/.zshrc'
 
+}
+
+install_krew_plugins() {
+    # https://github.com/ahmetb/kubectx
+    sudo -u ${USERNAME} zsh -c 'kubectl krew install ctx'
+    sudo -u ${USERNAME} zsh -c 'kubectl krew install ns'
 }
 
 install_microk8s() {
