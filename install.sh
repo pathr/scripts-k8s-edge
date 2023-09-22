@@ -202,8 +202,8 @@ install_microk8s() {
     sudo chmod 600 ${USERHOME}/.kube/config
 
     # enabled addons
-    microk8s enable dns
-    microk8s enable hostpath-storage
+    sudo microk8s enable dns
+    sudo microk8s enable hostpath-storage
 }
 
 say() {
