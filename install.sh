@@ -188,8 +188,6 @@ install_kubectl() {
 }
 
 install_krew() {
-    # TBD: add here 
-    # install krew (?)
     # install kubectl-ns
 
     cd /tmp
@@ -200,9 +198,9 @@ install_krew() {
     tar zxvf "${KREW}.tar.gz"
     mv /tmp/krew-${OS}_${ARCH} /tmp/krew
 
+    # executed as pathr user
     sudo -u ${USERNAME} zsh -c '/tmp/krew install krew'
-
-    echo 'export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"' >> ${USERHOME}/.zshrc
+    sudo -u ${USERNAME} zsh -c 'echo "export PATH=\"${KREW_ROOT:-$HOME/.krew}/bin:$PATH\"" >> ${HOME}/.zshrc'
 
 }
 
