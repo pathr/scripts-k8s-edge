@@ -153,8 +153,16 @@ install() {
     install_microk8s
     install_helm
     install_kubectl
+    install_krew
+    install_krew_plugins
+    install_other
     install_flux
     say "installation end"
+}
+
+install_other() {
+    say "installing other tools"
+    sudo apt install fzf
 }
 
 install_flux() {
@@ -184,6 +192,29 @@ install_kubectl() {
     say "installing kubectl"
     need_cmd snap
     sudo snap install kubectl --classic
+}
+
+install_krew() {
+    # install kubectl-ns
+
+    cd /tmp
+    OS="$(uname | tr '[:upper:]' '[:lower:]')"
+    ARCH="$(uname -m | sed -e 's/x86_64/amd64/' -e 's/\(arm\)\(64\)\?.*/\1\2/' -e 's/aarch64$/arm64/')"
+    KREW="krew-${OS}_${ARCH}"
+    curl -fsSLO "https://github.com/kubernetes-sigs/krew/releases/latest/download/${KREW}.tar.gz"
+    tar zxvf "${KREW}.tar.gz"
+    mv /tmp/krew-${OS}_${ARCH} /tmp/krew
+
+    # executed as pathr user
+    sudo -u ${USERNAME} zsh -c '/tmp/krew install krew'
+    sudo -u ${USERNAME} zsh -c 'echo "export PATH=\"${KREW_ROOT:-$HOME/.krew}/bin:$PATH\"" >> ${HOME}/.zshrc'
+
+}
+
+install_krew_plugins() {
+    # https://github.com/ahmetb/kubectx
+    sudo -u ${USERNAME} zsh -c 'source ~/.zshrc; kubectl krew install ctx'
+    sudo -u ${USERNAME} zsh -c 'source ~/.zshrc; kubectl krew install ns'
 }
 
 install_microk8s() {
