@@ -162,7 +162,7 @@ install() {
 
 install_other() {
     say "installing other tools"
-    sudo apt install fzf
+    sudo apt install fzf dos2unix speedtest-cli tree apt-offline jq wget ffmpeg apt-transport-https ca-certificates curl gnupg-agent software-properties-common zip unzip python3-pip mlocate
 }
 
 install_flux() {
