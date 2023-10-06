@@ -142,6 +142,7 @@ create_user() {
     say "creating ${USERNAME} user with home in ${USERHOME}"
     sudo adduser ${USERNAME} --home ${USERHOME} --system --disabled-password --shell /usr/bin/zsh
     sudo passwd --delete ${USERNAME}
+    sudo usermod -a -G sudo ${USERNAME}
 
     sudo mkdir -p ${USERHOME}/.kube
     sudo chown -R ${USERNAME} ${USERHOME}
