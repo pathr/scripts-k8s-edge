@@ -56,17 +56,28 @@ main() {
     header
 
     local prompt=yes
-    for arg in "$@"; do
-        case "$arg" in
-            -h|--help)
+    # Parse command-line options
+    while getopts "hyu:" opt; do
+        case ${opt} in
+            h)
                 usage
                 exit 0
                 ;;
-            -y)
+            y)
                 prompt=no
-                shift
                 ;;
-            *)
+            u)
+                USERNAME=$OPTARG
+                ;;
+            \? )
+                echo "Invalid option: $OPTARG" 1>&2
+                show_usage
+                exit 1
+                ;;
+            :)
+                echo "Invalid option: $OPTARG requires an argument" 1>&2
+                show_usage
+                exit 1
                 ;;
         esac
     done
@@ -98,9 +109,9 @@ main() {
 
     verify
 
-    create_user
-    install
-    setup
+    # create_user
+    # install
+    # setup
 }
 
 user_can_sudo() {
