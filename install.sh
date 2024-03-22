@@ -10,7 +10,7 @@
 set -ue
 
 USERNAME="pathr"
-USERHOME="/home/${USERNAME}"
+
 SNAP_CHANNEL_VERSION="1.28"
 _divider="--------------------------------------------------------------------------------"
 _prompt=">>>"
@@ -150,6 +150,7 @@ setup() {
 }
 
 create_user() {
+    USERHOME="/home/${USERNAME}"
     say "creating ${USERNAME} user with home in ${USERHOME}"
     sudo adduser ${USERNAME} --home ${USERHOME} --system --disabled-password --shell /usr/bin/zsh
     sudo passwd --delete ${USERNAME}
