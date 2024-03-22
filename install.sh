@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # setup.sh
 #
@@ -163,13 +163,13 @@ create_user() {
 install() {
     say "installation start"
     install_zsh
-    install_microk8s
-    install_helm
-    install_kubectl
-    install_krew
-    install_krew_plugins
-    install_other
-    install_flux
+    # install_microk8s
+    # install_helm
+    # install_kubectl
+    # install_krew
+    # install_krew_plugins
+    # install_other
+    # install_flux
     say "installation end"
 }
 
