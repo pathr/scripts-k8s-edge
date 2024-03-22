@@ -109,11 +109,9 @@ main() {
 
     verify
 
-    echo "${USERNAME}"
-
-    # create_user
-    # install
-    # setup
+    create_user
+    install
+    setup
 }
 
 user_can_sudo() {
