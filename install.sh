@@ -189,7 +189,7 @@ install_zsh() {
     sudo apt install -y zsh
     zsh --version
 
-    # download oh-myl-zsh installation script
+    # download oh-my-zsh installation script
     curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -o /tmp/i.sh && chmod +x /tmp/i.sh
     sudo -u ${USERNAME} sh -c 'RUNZSH=no /tmp/i.sh'
 
