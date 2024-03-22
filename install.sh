@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # setup.sh
 #
@@ -10,7 +10,7 @@
 set -ue
 
 USERNAME="pathr"
-USERHOME="/home/${USERNAME}"
+
 SNAP_CHANNEL_VERSION="1.28"
 _divider="--------------------------------------------------------------------------------"
 _prompt=">>>"
@@ -56,17 +56,28 @@ main() {
     header
 
     local prompt=yes
-    for arg in "$@"; do
-        case "$arg" in
-            -h|--help)
+    # Parse command-line options
+    while getopts "hyu:" opt; do
+        case ${opt} in
+            h)
                 usage
                 exit 0
                 ;;
-            -y)
+            y)
                 prompt=no
-                shift
                 ;;
-            *)
+            u)
+                USERNAME=$OPTARG
+                ;;
+            \? )
+                echo "Invalid option: $OPTARG" 1>&2
+                show_usage
+                exit 1
+                ;;
+            :)
+                echo "Invalid option: $OPTARG requires an argument" 1>&2
+                show_usage
+                exit 1
                 ;;
         esac
     done
@@ -139,6 +150,7 @@ setup() {
 }
 
 create_user() {
+    USERHOME="/home/${USERNAME}"
     say "creating ${USERNAME} user with home in ${USERHOME}"
     sudo adduser ${USERNAME} --home ${USERHOME} --system --disabled-password --shell /usr/bin/zsh
     sudo passwd --delete ${USERNAME}
@@ -177,7 +189,7 @@ install_zsh() {
     sudo apt install -y zsh
     zsh --version
 
-    # download oh-myl-zsh installation script
+    # download oh-my-zsh installation script
     curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -o /tmp/i.sh && chmod +x /tmp/i.sh
     sudo -u ${USERNAME} sh -c 'RUNZSH=no /tmp/i.sh'
 
