@@ -163,7 +163,7 @@ create_user() {
 install() {
     say "installation start"
     install_zsh
-    # install_microk8s
+    install_microk8s
     # install_helm
     # install_kubectl
     # install_krew
