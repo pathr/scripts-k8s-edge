@@ -109,6 +109,8 @@ main() {
 
     verify
 
+    echo "${USERNAME}"
+
     # create_user
     # install
     # setup
