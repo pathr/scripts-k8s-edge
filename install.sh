@@ -165,7 +165,7 @@ install() {
     install_zsh
     install_microk8s
     install_helm
-    # install_kubectl
+    install_kubectl
     # install_krew
     # install_krew_plugins
     # install_other
