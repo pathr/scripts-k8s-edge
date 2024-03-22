@@ -166,10 +166,10 @@ install() {
     install_microk8s
     install_helm
     install_kubectl
-    # install_krew
-    # install_krew_plugins
-    # install_other
-    # install_flux
+    install_krew
+    install_krew_plugins
+    install_other
+    install_flux
     say "installation end"
 }
 
