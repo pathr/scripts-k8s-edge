@@ -68,7 +68,6 @@ main() {
                 ;;
             u)
                 USERNAME=$OPTARG
-                echo "hello"
                 ;;
             \? )
                 echo "Invalid option: $OPTARG" 1>&2
