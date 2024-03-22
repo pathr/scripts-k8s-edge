@@ -10,7 +10,7 @@
 set -ue
 
 USERNAME="pathr"
-USERHOME="/home/pathr"
+USERHOME="/home/${USERNAME}"
 SNAP_CHANNEL_VERSION="1.28"
 _divider="--------------------------------------------------------------------------------"
 _prompt=">>>"
