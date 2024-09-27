@@ -147,7 +147,7 @@ verify() {
 }
 
 setup() {
-    say 'do dome setup'
+    say 'runnig setup'
     setup_zsh
     setup_microk8s
 }
@@ -174,11 +174,11 @@ setup_user() {
 
 install() {
     say "installation start"
-    install_zsh
     install_microk8s
-    install_helm
     install_kubectl
+    install_helm
     install_krew
+    install_zsh
     install_krew_plugins
     install_other
     install_flux
