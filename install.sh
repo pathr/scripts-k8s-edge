@@ -110,6 +110,7 @@ main() {
     verify
 
     create_user
+    setup_user
     install
     setup
 }
@@ -147,12 +148,23 @@ verify() {
 
 setup() {
     say 'do dome setup'
+    setup_zsh
+    setup_microk8s
 }
 
 create_user() {
     USERHOME="/home/${USERNAME}"
     say "creating ${USERNAME} user with home in ${USERHOME}"
-    sudo adduser ${USERNAME} --home ${USERHOME} --system --disabled-password --shell /usr/bin/zsh
+    if ! id -u ${USERNAME} >/dev/null 2>&1; then
+        sudo adduser ${USERNAME} --home ${USERHOME} --system --disabled-password
+    else
+        say "User ${USERNAME} already exists"
+    fi
+}
+
+setup_user() {
+    USERHOME="/home/${USERNAME}"
+    sudo usermod --shell /usr/bin/zsh ${USERNAME}
     sudo passwd --delete ${USERNAME}
     sudo usermod -a -G sudo ${USERNAME}
 
@@ -188,7 +200,9 @@ install_zsh() {
     need_cmd apt
     sudo apt install -y zsh
     zsh --version
+}
 
+setup_zsh() {
     # download oh-my-zsh installation script
     curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -o /tmp/i.sh && chmod +x /tmp/i.sh
     sudo -u ${USERNAME} sh -c 'RUNZSH=no /tmp/i.sh'
@@ -238,16 +252,18 @@ install_microk8s() {
     # wait untill ready
     sudo microk8s status --wait-ready
 
+    # enabled addons
+    sudo microk8s enable dns
+    sudo microk8s enable hostpath-storage
+}
+
+setup_microk8s() {
     # prepare for pathr user
     sudo usermod -a -G microk8s ${USERNAME}
     sudo microk8s config > /tmp/kube_config
     sudo mv /tmp/kube_config ${USERHOME}/.kube/config
     sudo chown -R ${USERNAME} ${USERHOME}/.kube
     sudo chmod 600 ${USERHOME}/.kube/config
-
-    # enabled addons
-    sudo microk8s enable dns
-    sudo microk8s enable hostpath-storage
 }
 
 say() {
