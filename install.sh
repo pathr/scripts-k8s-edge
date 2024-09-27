@@ -156,20 +156,22 @@ create_user() {
     USERHOME="/home/${USERNAME}"
     say "creating ${USERNAME} user with home in ${USERHOME}"
     if ! id -u ${USERNAME} >/dev/null 2>&1; then
-        sudo adduser ${USERNAME} --home ${USERHOME} --system --disabled-password
+        sudo adduser ${USERNAME} --home ${USERHOME}
     else
         say "User ${USERNAME} already exists"
     fi
 }
 
 setup_user() {
-    USERHOME="/home/${USERNAME}"
-    sudo usermod --shell /usr/bin/zsh ${USERNAME}
-    sudo passwd --delete ${USERNAME}
-    sudo usermod -a -G sudo ${USERNAME}
 
-    sudo mkdir -p ${USERHOME}/.kube
-    sudo chown -R ${USERNAME} ${USERHOME}
+    # change shell to zsh
+    sudo usermod --shell /usr/bin/zsh ${USERNAME}
+
+    # disable password login
+    sudo passwd --delete ${USERNAME}
+
+    # add user to sudo group
+    sudo usermod -a -G sudo ${USERNAME}
 }
 
 install() {
@@ -261,6 +263,8 @@ setup_microk8s() {
     # prepare for pathr user
     sudo usermod -a -G microk8s ${USERNAME}
     sudo microk8s config > /tmp/kube_config
+    sudo mkdir -p ${USERHOME}/.kube
+    sudo chown -R ${USERNAME} ${USERHOME}
     sudo mv /tmp/kube_config ${USERHOME}/.kube/config
     sudo chown -R ${USERNAME} ${USERHOME}/.kube
     sudo chmod 600 ${USERHOME}/.kube/config
