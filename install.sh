@@ -111,8 +111,8 @@ main() {
 
     create_user
     setup_user
-    install
-    setup
+    # install
+    # setup
 }
 
 user_can_sudo() {
