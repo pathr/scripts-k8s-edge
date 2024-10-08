@@ -187,6 +187,7 @@ install_k9s() {
     say "installing k9s"
     need_cmd snap
     sudo snap install k9s --devmode
+    sudo ln -s /snap/k9s/current/bin/k9s /snap/bin/ # https://github.com/derailed/k9s/issues/2128
 }
 
 install_kubectl() {
