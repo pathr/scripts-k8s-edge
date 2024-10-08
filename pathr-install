@@ -206,6 +206,9 @@ install_microk8s() {
     # enabled addons
     sudo microk8s enable dns
     sudo microk8s enable hostpath-storage
+
+    # add user to microk8s group
+    sudo usermod -a -G microk8s ${USERNAME}
 }
 
 say() {
