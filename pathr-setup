@@ -143,8 +143,8 @@ verify() {
 
 setup() {
     say 'runnig setup'
-    setup_zsh
     setup_microk8s
+    setup_zsh
 }
 
 setup_zsh() {
