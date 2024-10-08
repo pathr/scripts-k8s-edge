@@ -107,7 +107,6 @@ main() {
     fi
 
     verify
-
     setup
 }
 
@@ -152,7 +151,7 @@ setup_zsh() {
     # install oh-my-zsh
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
-    sudo sed -i 's/^plugins=(.*)/plugins=(git kubectl)/' ${USERHOME}/.zshrc 
+    sed -i 's/^plugins=(.*)/plugins=(git kubectl)/' ${USERHOME}/.zshrc 
 }
 
 
