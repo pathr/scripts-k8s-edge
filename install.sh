@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# setup.sh
+# install.sh
 #
 # This is just a little script to:
 # - create home for pathr
@@ -109,9 +109,9 @@ main() {
 
     verify
 
-    create_user
-    setup_user
-    # install
+    # create_user
+    # setup_user
+    install
     # setup
 }
 
@@ -178,10 +178,11 @@ install() {
     say "installation start"
     install_microk8s
     install_kubectl
+    install_k9s
     install_helm
-    install_krew
+    # install_krew
     install_zsh
-    install_krew_plugins
+    # install_krew_plugins
     install_other
     install_flux
     say "installation end"
@@ -215,6 +216,12 @@ setup_zsh() {
 install_helm() {
     say "installing helm"
     sudo snap install helm --classic
+}
+
+install_k9s() {
+    say "installing k9s"
+    need_cmd snap
+    sudo snap install k9s --devmode
 }
 
 install_kubectl() {
