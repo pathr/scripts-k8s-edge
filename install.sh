@@ -109,10 +109,7 @@ main() {
 
     verify
 
-    # create_user
-    # setup_user
     install
-    # setup
 }
 
 user_can_sudo() {
@@ -152,37 +149,13 @@ setup() {
     setup_microk8s
 }
 
-create_user() {
-    USERHOME="/home/${USERNAME}"
-    say "creating ${USERNAME} user with home in ${USERHOME}"
-    if ! id -u ${USERNAME} >/dev/null 2>&1; then
-        sudo adduser ${USERNAME} --home ${USERHOME}
-    else
-        say "User ${USERNAME} already exists"
-    fi
-}
-
-setup_user() {
-
-    # change shell to zsh
-    sudo usermod --shell /usr/bin/zsh ${USERNAME}
-
-    # disable password login
-    sudo passwd --delete ${USERNAME}
-
-    # add user to sudo group
-    sudo usermod -a -G sudo ${USERNAME}
-}
-
 install() {
     say "installation start"
     install_microk8s
     install_kubectl
     install_k9s
     install_helm
-    # install_krew
     install_zsh
-    # install_krew_plugins
     install_other
     install_flux
     say "installation end"
@@ -205,14 +178,6 @@ install_zsh() {
     zsh --version
 }
 
-setup_zsh() {
-    # download oh-my-zsh installation script
-    curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -o /tmp/i.sh && chmod +x /tmp/i.sh
-    sudo -u ${USERNAME} sh -c 'RUNZSH=no /tmp/i.sh'
-
-    sudo sed -i 's/^plugins=(.*)/plugins=(git kubectl)/' ${USERHOME}/.zshrc 
-}
-
 install_helm() {
     say "installing helm"
     sudo snap install helm --classic
@@ -230,29 +195,6 @@ install_kubectl() {
     sudo snap install kubectl --classic
 }
 
-install_krew() {
-    # install kubectl-ns
-
-    cd /tmp
-    OS="$(uname | tr '[:upper:]' '[:lower:]')"
-    ARCH="$(uname -m | sed -e 's/x86_64/amd64/' -e 's/\(arm\)\(64\)\?.*/\1\2/' -e 's/aarch64$/arm64/')"
-    KREW="krew-${OS}_${ARCH}"
-    curl -fsSLO "https://github.com/kubernetes-sigs/krew/releases/latest/download/${KREW}.tar.gz"
-    tar zxvf "${KREW}.tar.gz"
-    mv /tmp/krew-${OS}_${ARCH} /tmp/krew
-
-    # executed as pathr user
-    sudo -u ${USERNAME} zsh -c '/tmp/krew install krew'
-    sudo -u ${USERNAME} zsh -c 'echo "export PATH=\"${KREW_ROOT:-$HOME/.krew}/bin:$PATH\"" >> ${HOME}/.zshrc'
-
-}
-
-install_krew_plugins() {
-    # https://github.com/ahmetb/kubectx
-    sudo -u ${USERNAME} zsh -c 'source ~/.zshrc; kubectl krew install ctx'
-    sudo -u ${USERNAME} zsh -c 'source ~/.zshrc; kubectl krew install ns'
-}
-
 install_microk8s() {
     say "installing microk8s"
     need_cmd snap
@@ -266,21 +208,9 @@ install_microk8s() {
     sudo microk8s enable hostpath-storage
 }
 
-setup_microk8s() {
-    # prepare for pathr user
-    sudo usermod -a -G microk8s ${USERNAME}
-    sudo microk8s config > /tmp/kube_config
-    sudo mkdir -p ${USERHOME}/.kube
-    sudo chown -R ${USERNAME} ${USERHOME}
-    sudo mv /tmp/kube_config ${USERHOME}/.kube/config
-    sudo chown -R ${USERNAME} ${USERHOME}/.kube
-    sudo chmod 600 ${USERHOME}/.kube/config
-}
-
 say() {
     printf 'pathr-install: %s\n' "$1"
 }
-
 
 err() {
     say "$1" >&2
